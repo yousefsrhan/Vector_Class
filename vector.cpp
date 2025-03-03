@@ -10,9 +10,9 @@ class  Vector
         int capacity = 0;
     public:
         Vector(int Capacity) :
-            capacity( Capacity <=0?1 : Capacity) ,
+            capacity( Capacity <=0? 1 : Capacity) ,
             size(0),
-            arr( new int [Capacity])  {}
+            arr( new int [capacity])  {}
         ~Vector(){ delete [] arr ; arr = nullptr;}
         int getByIndex(int index){
             if (index >=0)
@@ -25,11 +25,14 @@ class  Vector
             int getCapacity(){
             return this->capacity;
             }
-        void setVal(int index,int value){
-             if (index >=capacity)
+        void indexSet(int index,int value){
+             if (index >=capacity || index <0){
                 cout << "Index out of range";
+                return;
+                }
              // if acceptable value
              this->arr[index]= value;
+             size++;
             }
         int find(int value)
             {
@@ -48,6 +51,11 @@ class  Vector
             return arr[0];
             }
             int getBack(){
+
+                if(size <=0 || size>=capacity){
+                    cout << "index out of range";
+                   return -1;
+                }
             return arr[size-1];   // don't forget to do minus 1
             }
             // let's push_back[[ version 1.0 ]]
@@ -70,38 +78,60 @@ class  Vector
 //            }
             // ..
 // this push_back has o(n) operation [[ LINEAR ]]
+// if done in loop will end up with O(n^2) Quadratic (BAD)!!;
         // create new *ptr
         // copy elememnts from 0 to newsize index -1 to arr
         // swap pointers
         // delete nd ptr
-        void push_back_capacityTrickApplied(int val){
-        // don't worry this method is used to append , which means you will use it
-        //to add to end using the new approach :
-        //size here will be linked to number of elements not total chairs
+        // new appraoch!
+        void push_back(int val){
+        // don't worry this method is used to append only if size reaches capacity!
+        //approach : size here will be linked to number of elements not total chairs
             if(size == capacity){
-                // Expand capaicty
+               expandCapacity();
+            }
+                arr[size++]= val;
+            // the prv line will always happen
+            // here I mean the two operations of:
+            // [1] size++
+            //[2] assigning the new value;
+            //note : here size is equal to total number of elements  1 2 3 etc
+        }
+        void expandCapacity(){
                 capacity*=2;
                 int *arr2 = new int[capacity];
                 for(int i=0 ; i<size;++i)
                     arr2[i]= arr[i];
                 swap(arr2,arr);
                 delete [] arr2;
-            }
-            // will always happen
-            // here I mean the two operations of:
-            // [1] size++
-            //[2] assigning the new value;
-                arr[size++]= val;
-                // here size is equal to total number of elements  1 2 3 etc
         }
         void resize(int newSize){
-            int *arr2 = new int [newSize];
+
+            bool Valid = (newSize>capacity||newSize<=0 )? true:false;
+            bool isSmaller = newSize<=capacity? true:false;
+            if(!Valid)
+                return;
+            if(isSmaller){
+            int *arr2 = new int [newSize]();
             for(int i=0 ; i<newSize;++i){
                 arr2[i] = arr[i];
             }
             swap(arr2,arr);
+            this->capacity= newSize;
             delete [] arr2;
+            return;
             }
+            // if is bigger than older capacity
+            this->capacity= newSize;
+            int *arr2 = new int [newSize];
+            for(int i=0 ; i<size;++i)
+               arr2[i]= arr[i];
+               this->capacity= newSize;
+               swap(arr2,arr);
+               delete []arr2;
+            }
+            
+            
             // insertion is based on shifting elements
             // we shift from end to beginning >> but why?
 
