@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using   namespace std;
 
 class Vector {
@@ -8,14 +9,14 @@ private:
 	int* arr = nullptr;
 public:
 	Vector(int size) :
-	size(size >= 0 ? size : -1)
+	size(size >= 0 ? size : 0)
 	, capacity(size > 0 ? 2 * size : 1)
 	, arr(new int[capacity]) {}
 	~Vector() {
 		delete [] arr;
 		arr = nullptr;
 	}
-	// (( getter Functions ))
+	// (( getter Functions )) count [4]
 	int getFront() {
 		return arr[0];
 	}
@@ -28,16 +29,18 @@ public:
 	int getCapacity() {
 		  return capacity;
 	  }
+	// bool functions count [1]
 	  bool isEmpty() {
-		  return (arr == nullptr || capacity == 0);
+		  return (arr == nullptr || size == 0);
 	}
+	  // find (search) count [1]
 	  int find(int val) {
 		  for (int i = 0; i < size;++i)
 			  if (val == arr[i])
 				  return i ;
 		  return -1;
 	  }
-
+	  // change size/capacity -add/delete/insert  functions, count [2]
 	  void expandCapacity() {
 		  capacity= 2 * capacity;
 		  int* arr2 = new int[capacity];
@@ -52,6 +55,25 @@ public:
 			  expandCapacity();
 		  }
 		  arr[size++] = val;
+	  }
+	  int popLast() {
+		  int temp = arr[size - 1];
+		  arr[size - 1] = NULL;
+		  size--;
+		  return temp;
+	  }
+	  void insert(int index, int val) {
+		  if (index < 0 || index > size)
+		  {
+			  cout << "out of range"<<endl;
+			  return;
+		  }
+		  if (size == capacity)
+			  expandCapacity();
+		  size++;
+		  for (int i = size; i > index;--i)
+			  arr[i] = arr[i - 1];
+		  arr[index] = val;
 	  }
 		  void resize(int newSize) {
 			  // Do nothing if newSize is invalid or equal to the current capacity.
@@ -68,9 +90,34 @@ public:
 			  // Adjust the current size if necessary.
 			  if (size > newSize)
 				  size = newSize;
-
+		  }
+		  void display() {
+			  for (int i = 0;i < size;++i)
+				  cout << arr[i] << " ";
+			  cout << endl;
 		  }
 };
 int main()
 {
+	Vector v(0);
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(3);
+	v.push_back(4);
+	v.push_back(5);
+	v.display();
+	// output 1 2 3 4 5
+	vector<int> myVector(5);
+	myVector.push_back(1);
+	myVector.push_back(2);
+	myVector.push_back(3);
+	myVector.push_back(4);
+	myVector.push_back(5);
+	for (int i = 0; i < 5; ++i)
+		cout << myVector[i]<<" ";
+	cout<< endl;
+	// output 0 0 0 0 0
+	for (int i = 0; i < 10; ++i)
+		cout << myVector[i]<<" ";
+		// output 0 0 0 0 0 1 2 3 4 5
 }
