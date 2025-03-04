@@ -39,8 +39,8 @@ public:
 	  }
 
 	  void expandCapacity() {
-		  int tmp = 2 * capacity;
-		  int* arr2 = new int[tmp];
+		  capacity= 2 * capacity;
+		  int* arr2 = new int[capacity];
 		  for (int i = 0; i < size; ++i) {
 			  arr2[i] = arr[i];
 		  }
