@@ -62,6 +62,13 @@ public:
 		  size--;
 		  return temp;
 	  }
+	  int pop(int index) {
+		  int temp = arr[index];
+		  for (int i = index; i < size;++i)
+			  arr[i] = arr[i + 1];
+		  arr[size--] = NULL;
+		  return temp;
+	  }
 	  void insert(int index, int val) {
 		  if (index < 0 || index > size)
 		  {
@@ -102,6 +109,18 @@ public:
 			  for (int i = size - 1; i >= 1;--i)
 				  arr[i] = arr[i - 1];
 			  arr[0] = temp;
+		  }
+		  void rightRotation(int n)
+		  { 
+			  for (int i = 0; i < n;++i) 
+				  rightRotation();
+		  } 
+		  void leftRotation()
+		  {
+			  int temp = arr[0];
+			  for (int i = 0; i < size-1;++i)
+				  arr[i] = arr[i + 1];
+			  arr[size-1] = temp;
 			  
 			  //swap(arr[0], arr[size - 1]);
 		  }
@@ -111,11 +130,13 @@ int main()
 	Vector v(0);
 	v.push_back(1);
 	v.push_back(2);
+	v.push_back(3);
 	v.push_back(4);
 	v.push_back(5);
-	v.insert(2, 3);
-	v.popLast();
+	v.pop(1);
 	v.display();
+	
+	//v.rightRotation();
 
 	// output 1 2 3 4 5
 	//vector<int> myVector(5);
