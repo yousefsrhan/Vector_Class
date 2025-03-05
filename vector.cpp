@@ -111,7 +111,11 @@ public:
 			  arr[0] = temp;
 		  }
 		  void rightRotation(int n)
-		  { 
+		  { // we use modules to easily remove repitions 
+			  n %= size;
+			  // if size > n (remove repeated cylces of rotating) 
+			  // if size == n no rotations needed ( willl back to orignal)
+			  // if size < n -> no repeated cycles so keep all value of n
 			  for (int i = 0; i < n;++i) 
 				  rightRotation();
 		  } 
