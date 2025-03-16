@@ -1,2 +1,2 @@
-# DS Course LVL 1( dr Mostafa Saad, Adel Nasim)
-my implementation for vector from Dr mostafa course
+# DS Course LVL 1
+my implementation for vector
