@@ -1,0 +1,148 @@
+// I includeded  libraries I will need to resolve leet code problems
+ #include <iostream>
+#include <cmath>
+#include <algorithm>
+#include <vector>
+using namespace std;
+ class  ListNode
+ {
+    private:
+         ListNode* next;
+         long long data;
+    public:
+        void setData(long long val) 
+        {
+            data = val;
+        }
+        void setNext(ListNode *nextNode) 
+        {
+            next= nextNode;
+        }
+        ListNode* getNext()
+        {
+            return next;
+        }
+        long long getData()
+        {
+            return data;
+        }
+        ListNode() : next(nullptr), data(0) {}
+ };
+ class LinkedList {
+ private:
+     ListNode* head;
+     long long size;
+ public:
+     
+     LinkedList(ListNode* newHead, long long val) :head(newHead) , size(1)
+     {
+         head->setData(val);
+         
+     }
+     // another constructor 
+     LinkedList() :head(nullptr) , size(0) 
+     {
+        // head->setData(0); -> will lead to crash because of empty pointer!
+     } 
+     // regualr methods training 
+     /*
+      ==>>
+     */
+     // 1] first : short code methods
+     // is empty checks if head is nullptr
+     bool isEmpty() {return !head;}
+     long long getSize() { return size; }
+
+     // count number of elements in linked list using traverse
+     long long count() 
+    {
+         ListNode* current = head;
+         long long counter = 0;
+         while (current)
+         {
+             counter++;
+             current= current->getNext();
+         }
+         return counter;
+     }
+     // iterate over singly linked list and print all values , seprated by white space
+     void display()
+     {
+         ListNode* current = head;
+         while (current)
+         {
+             cout << current->getData()<<" ";
+             current = current->getNext();
+         }
+         cout << endl;
+     }
+     bool search(long long val)
+     {
+         ListNode* current = head;
+         while (current)
+         {
+             if (current->getData() == val) return true;
+             current = current->getNext();
+         }
+         return false;
+     }
+     long long searchIDX(int val) 
+     {
+         ListNode* current = head;
+         long long baseOneIndex = 1;
+         bool found = false;
+         while (current && !found)
+         {
+             if (current->getData() == val) 
+             {
+                 found = true;
+                 break;
+             }
+             baseOneIndex++;
+             current = current->getNext();
+         }
+         return (found ? baseOneIndex: -1);
+     }
+     void insertAtBeginning(long long val) 
+     {
+         ListNode* newNode= new ListNode() ;
+         newNode->setNext(head);
+         newNode->setData(val); // no problem even with empty list
+         head = newNode;
+         size++;
+     }
+     void insertAtPosition(int val, int index=0) 
+     {
+         if (index > size|| index<=0) {
+             cout << "invalid positioning";
+         }
+
+         if (!index || index == 1)
+             insertAtBeginning(val);
+
+         else 
+         {
+             ListNode *newNode = new ListNode();
+             long long counter = 0;
+             ListNode* previous = head;
+             while (counter<=index-1)
+             {
+                 previous = previous->getNext();
+                 counter++;
+             }
+             newNode->setNext(previous->getNext());
+             newNode->setData(val);
+             previous->setNext(newNode);
+             size++;
+         }
+     }
+     ~LinkedList() {
+             ListNode* current = head;
+             while (current != nullptr) {
+                 ListNode* temp = current;
+                 current = current->getNext();
+                 delete temp;
+             }
+             head = nullptr; // optional but for more safety !
+     }
+ };
