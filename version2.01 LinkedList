@@ -1,0 +1,295 @@
+// I includeded  libraries I will need to resolve leet code problems
+ #include <iostream>
+#include <cmath>
+#include <algorithm>
+#include <vector>
+using namespace std;
+ class  ListNode
+ {
+    private:
+         ListNode* next;
+         long long data;
+    public:
+        void setData(long long val) 
+        {
+            data = val;
+        }
+        void setNext(ListNode *nextNode) 
+        {
+            next= nextNode;
+        }
+        ListNode* getNext()
+        {
+            return next;
+        }
+        long long getData()
+        {
+            return data;
+        }
+        ListNode() : next(nullptr), data(0) {}
+        ListNode(long long val) :next(nullptr)
+        {
+            data = val;
+        }
+ };
+ class LinkedList {
+ private:
+     ListNode* head;
+     long long size;
+ public:
+
+     LinkedList(ListNode* newHead, long long val) :head(newHead), size(1)
+     {
+         head->setData(val);
+
+     }
+     // another constructor 
+     LinkedList() :head(nullptr), size(0)
+     {
+         // head->setData(0); -> will lead to crash because of empty pointer!
+     }
+     // regualr methods training 
+     /*
+      ==>>
+     */
+     // 1] first : short code methods
+     // is empty checks if head is nullptr
+     bool isEmpty() { return !head; }
+     long long getSize() { return size; }
+
+     // count number of elements in linked list using traverse
+     long long count()
+     {
+         ListNode* current = head;
+         long long counter = 0;
+         while (current)
+         {
+             counter++;
+             current = current->getNext();
+         }
+         return counter;
+     }
+     // iterate over singly linked list and print all values , seprated by white space
+     void display()
+     {
+         ListNode* current = head;
+         while (current)
+         {
+             cout << current->getData() << " ";
+             current = current->getNext();
+         }
+         cout << endl;
+     }
+     bool search(long long val)
+     {
+         ListNode* current = head;
+         while (current)
+         {
+             if (current->getData() == val) return true;
+             current = current->getNext();
+         }
+         return false;
+     }
+     long long searchIDX(int val)
+     {
+         ListNode* current = head;
+         long long baseOneIndex = 1;
+         bool found = false;
+         while (current && !found)
+         {
+             if (current->getData() == val)
+             {
+                 found = true;
+                 break;
+             }
+             baseOneIndex++;
+             current = current->getNext();
+         }
+         return (found ? baseOneIndex : -1);
+     }
+     void insertAtBeginning(long long val)
+     {
+         ListNode* newNode = new ListNode();
+         newNode->setNext(head);
+         newNode->setData(val); // no problem even with empty list
+         head = newNode;
+         size++;
+     }
+     void insertAtPosition(int val, int index = 0)
+     {
+         if (index > size || index <= 0) {
+             cout << "invalid positioning";
+         }
+
+         else if (!index || index == 1)
+             insertAtBeginning(val);
+
+         else
+         {
+             ListNode* newNode = new ListNode();
+             long long counter = 0;
+             ListNode* previous = head;
+             while (counter < index - 1)
+             {
+                 previous = previous->getNext();
+                 counter++;
+             }
+             newNode->setNext(previous->getNext());
+             newNode->setData(val);
+             previous->setNext(newNode);
+             size++;
+         }
+     }
+     void insertAtEnd(long long val)
+     {
+         ListNode* newNode = new ListNode();
+         newNode->setData(val);
+         if (isEmpty()) 
+         {
+             head = newNode;
+             size++;
+             return;
+         }
+         else
+                        {
+             ListNode* current = head;
+             while (current->getNext())
+             {
+                 current = current->getNext();
+             }
+             current->setNext(newNode);
+             size++;
+         }
+     }
+     ~LinkedList() {
+             ListNode* current = head;
+             while (current != nullptr) {
+                 ListNode* temp = current;
+                 current = current->getNext();
+                 delete temp;
+             }
+             head = nullptr; // optional but for more safety !
+     }
+ };
+ class soltions
+ {
+     ListNode* reverseLinkedList(ListNode* head) {
+         if (!head || !head->getNext())
+             return head;
+         // you are not empty !!
+         // need more than 1 pointer!!
+         //// mistake was here( it was starting prv from head XX) : Fix start previous from no place( mull)
+         ListNode* previous = nullptr;
+         ListNode* current = head;
+         while (current)
+         {
+             ListNode* next = current->getNext();
+             current->setNext(previous);// correct order
+             previous = current;// ok
+             current = next;
+         }
+         // caution : previos is the last accessible node 
+         // // current and next are now null pointers
+         // now fix that lsat node point to null & correct head positioning
+         head = previous; // can be deleted and return previous directly 
+         return head;
+         // end question : reverseLinkedList
+     }
+     ListNode* buildLinkedListByVector(vector<long long >& vector)
+     {
+         // use dummy pointer for easy of edgecases
+         // and '&' symbol for globalization !!
+         ListNode* dummyHead = new ListNode();
+         long long vectorSize = vector.size();
+         ListNode* current = dummyHead;
+
+         for (long long i = 0;i < vectorSize;++i)
+         {
+             ListNode* newNode = new ListNode();
+             newNode->setData(vector[i]);
+             current->setNext(newNode);
+             current = current->getNext();
+         }
+         ListNode* result = dummyHead->getNext();
+         delete dummyHead;
+         return result;
+     }
+     // end question : buildLinkedListByVector
+     ListNode* reverseRecursively(ListNode* head)
+     {
+         if (!head || !head->getNext())
+             return head;// 1 2 3 4 5 ->null
+
+         ListNode* newHead = reverseRecursively(head->getNext());
+         // 5 is returned at this call
+         head->getNext()->setNext(head);
+         // last step!! 
+         head->setNext(nullptr);
+         return newHead;
+     }
+     ListNode* addTwoNumbers(ListNode* firstHead, ListNode* secondHead)
+     {
+         ListNode* dummyHead = new ListNode();
+         ListNode* current = dummyHead;
+         int carry = 0;
+         while (firstHead || secondHead || carry)
+         {
+             int sum = carry;
+             if (firstHead) 
+             {
+                 sum += firstHead->getData();
+                 firstHead = firstHead->getNext();
+
+             }
+             if (secondHead)
+             {
+                 sum += secondHead->getData();
+                 secondHead = secondHead->getNext();
+             }
+             ListNode* newNode = new ListNode();
+             newNode->setData(sum % 10);// we miss linking new item to previous 
+             current->setNext(newNode);
+             current= current->getNext();
+             carry = sum / 10;
+         }
+         // handle last case if there is still a carry  or add extra condtion! and change postion of sum 
+                 
+                //if (carry)
+                 //{
+                 //    ListNode* newNode = new ListNode();
+                 //    newNode->setData(carry);
+                 //}
+         return dummyHead->getNext();
+     }
+     ListNode* Add_One_to_a_Linked_List_Number(ListNode* head) {
+         if (!head)
+         {
+             return  new ListNode(1);
+         }
+         // if not empty or with one element it's same behaviour
+         ListNode* current = head;
+         long long  carry = 1;
+         while (current->getNext()) 
+         {
+             int sum = (carry+ current->getData());
+             current->setData(sum%10);
+             carry = sum/ 10;
+             current = current->getNext();
+         }
+         // handle last node alone
+         int sum = (carry + current->getData());
+         current->setData( sum% 10);
+         carry = sum/ 10;
+         // if there is still a carry create extra node for it !
+         if (carry)
+             current->setNext(new ListNode(carry) );
+         return head;
+     }
+ };
+ 
+
+int main()
+{
+
+}
+
