@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
  class  ListNode
- {
+ { 
     private:
          ListNode* next;
          long long data;
